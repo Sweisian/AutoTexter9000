@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <form method=POST action="{{ url_for('add_users') }}">
+                {% for i in range(10) %}
+                <div class="form-group">
+                    <input type="text" class="form-control" name="firstName{{ i }}" placeholder=" First Name">
+                    <input type="text" class="form-control" name="lastName{{ i }}" placeholder="Last Name">
+                    <input type="text" class="form-control" name="number{{ i }}" placeholder="Phone Number">
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary btn-block">Submit to database</button>
+            </form>
+            <br>
+            <div>
+                See current users <a href="{{ url_for('index') }}">here</a>.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
