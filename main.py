@@ -21,14 +21,14 @@ def add_users():
         curr_first_name = request.form['firstName' + str(i)]
         curr_last_name = request.form['lastName' + str(i)]
         curr_number = request.form['number' + str(i)]
-        if(curr_first_name == '' or curr_number == ''):
+        if curr_first_name == '' or curr_number == '':
             print(f"Did not insert name for row {i}. Data is missing.")
             continue
-        elif my_users_col.find_one({"number" : curr_num}) != None:
-            print(my_users_col.find({"number": curr_num}))
-            print(f"{curr_num} at row {i} is already in the database")
+        elif my_users_col.find_one({"number" : curr_number}):
+            print(my_users_col.find({"number": curr_number}))
+            print(f"{curr_number} at row {i} is already in the database")
             continue
-        mydict = { "name": curr_name,"number": curr_num}
+        mydict = { "first_name": curr_first_name, "last_name" : curr_last_name, "number": curr_number}
         x = my_users_col.insert_one(mydict)
     return redirect('/seeUsers')
 
@@ -36,9 +36,9 @@ def add_users():
 # def add_users():
 #     for i in range(0,9):
 #         curr_name = request.form['name' + str(i)]
-#         curr_num = request.form['num' + str(i)]
+#         curr_number = request.form['num' + str(i)]
 #         if(curr_name):
-#             mydict = { "username": curr_name,"number": curr_num}
+#             mydict = { "username": curr_name,"number": curr_number}
 #             x = my_users_col.insert_one(mydict)
 #     return redirect('/seeUsers')
 
