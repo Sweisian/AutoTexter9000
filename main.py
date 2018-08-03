@@ -1,12 +1,19 @@
 from flask import Flask, render_template, request, redirect
+import bandwidth
+import os
 import pymongo
 
+user_id = os.environ['BANDWIDTH_USER_ID']
+api_token = os.environ['BANDWIDTH_API_TOKEN']
+api_secret = os.environ['BANDWIDTH_API_SECRET']
+
+voice_api = bandwidth.client('voice', user_id, api_token, api_secret)
+messaging_api = bandwidth.client('messaging',  user_id, api_token, api_secret)
+account_api = bandwidth.client('account',  user_id, api_token, api_secret)
+
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
-
 mydb = myclient["pioneers_of_interactive_entertainment_nu"]
-
 my_users_col = mydb["users"]
-
 app = Flask(__name__)
 
 
@@ -45,10 +52,29 @@ def add_users():
 
 @app.route('/seeUsers')
 def see_users():
-    return_string = ""
-    for x in my_users_col.find({},{"_id": 0, "name": 1, "number": 1}):
-        return_string = return_string + str(x) + "<br>"
-    return return_string
+    user_data = my_users_col.find({}, {"_id": 0, "first_name": 1, "last_name": 1, "number": 1})
+
+    return render_template("displayUsers.html", user_data=user_data)
+
+
+@app.route('/sendTextForm')
+def send_text_form():
+    return render_template("sendText.html")
+
+
+@app.route('/sendText', methods=["POST"])
+def send_text():
+    my_number = '+19142268654'
+
+    user_data = my_users_col.find({}, {"_id": 0, "first_name": 1, "last_name": 1, "number": 1})
+
+    for curr_user in user_data:
+        curr_num = curr_user["number"]
+        print(curr_num)
+        message_id = messaging_api.send_message(from_=my_number, to='+1' + curr_num, text=request.form['userinput'])
+
+    return request.form['userinput']
+
 
 
 if __name__ == '__main__':
