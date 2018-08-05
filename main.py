@@ -39,6 +39,12 @@ def add_users():
         x = my_users_col.insert_one(mydict)
     return redirect('/seeUsers')
 
+
+@app.route('/removeUsers', methods=["POST"])
+def remove_users():
+
+    return redirect('/seeUsers')
+
 # @app.route('/addUsersCompletion', methods=["POST"])
 # def add_users():
 #     for i in range(0,9):
@@ -68,12 +74,15 @@ def send_text():
 
     user_data = my_users_col.find({}, {"_id": 0, "first_name": 1, "last_name": 1, "number": 1})
 
-    for curr_user in user_data:
-        curr_num = curr_user["number"]
-        print(curr_num)
-        message_id = messaging_api.send_message(from_=my_number, to='+1' + curr_num, text=request.form['userinput'])
+    # for curr_user in user_data:
+    #     curr_num = curr_user["number"]
+    #     print(curr_num)
+    #     message_id = messaging_api.send_message(from_=my_number, to='+1' + curr_num, text=request.form['userinput'])
 
-    return request.form['userinput']
+    #TODO: REMOVE TEMP HARDCODE
+    message_id = messaging_api.send_message(from_=my_number, to='+1' + "2033219249", text=request.form['userinput'])
+
+    return render_template("sendText.html")
 
 
 

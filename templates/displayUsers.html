@@ -1,13 +1,32 @@
 {% extends "layout.html" %}
 {% block body %}
+
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
+
 <div class="container">
     <div class="row">
+        <table style="width:100%">
+            <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Phone Number</th>
+                <th>Remove User</th>
+            </tr>
+            {% for x in user_data %}
+            <tr>
+                <td>{{x.get("first_name")}}</td>
+                <td>{{x.get("last_name")}}</td>
+                <td>{{x.get("number")}}</td>
+                <td><a href="{{ url_for('index') }}">here</a></td>
+            </tr>
+            {% endfor %}
+        </table>
         <div class="col-md-4 col-md-offset-4">
-                {% for x in user_data %}
-                <div>
-                    {{x}}
-                </div>
-                {% endfor %}
             <br>
             <div>
                 Back to adding users <a href="{{ url_for('index') }}">here</a>.
