@@ -16,6 +16,14 @@ mydb = myclient["pioneers_of_interactive_entertainment_nu"]
 my_users_col = mydb["users"]
 app = Flask(__name__)
 
+#################### TEST COMMANDS #######################
+# for x in my_users_col.find():
+#     my_users_col.update_one(x, {"$set": {"user_enabled": True}})
+#
+# for x in my_users_col.find():
+#     print(x.get("user_enabled"))
+#################### TEST COMMANDS #######################
+
 
 @app.route('/')
 def index():
@@ -35,14 +43,43 @@ def add_users():
             print(my_users_col.find({"number": curr_number}))
             print(f"{curr_number} at row {i} is already in the database")
             continue
-        mydict = { "first_name": curr_first_name, "last_name" : curr_last_name, "number": curr_number}
+        mydict = { "first_name": curr_first_name,
+                   "last_name": curr_last_name,
+                   "number": curr_number,
+                   "user_enabled": True
+                    }
         x = my_users_col.insert_one(mydict)
     return redirect('/seeUsers')
 
+# print("nigeria best country")
 
-@app.route('/removeUsers', methods=["POST"])
-def remove_users():
 
+@app.route('/alterUsers', methods=["POST"])
+def alter_users():
+    if request.values.get("enable_users"):
+        print("ENABLE USERS")
+        for val in request.values:
+            curr_user = my_users_col.find_one({"number":val})
+            if curr_user:
+                my_users_col.update_one(curr_user, {"$set": {"user_enabled": True}})
+                print(f"USER {curr_user} enabled!")
+    if request.values.get("disable_users"):
+        print("DISABLE USERS")
+        for val in request.values:
+            curr_user = my_users_col.find_one({"number":val})
+            if curr_user:
+                my_users_col.update_one(curr_user, {"$set": {"user_enabled": False}})
+                print(f"USER {curr_user} disabled!")
+    if request.values.get("delete_users"):
+        print("DELETE USERS")
+        for val in request.values:
+            curr_user = my_users_col.find_one({"number":val})
+            if curr_user:
+                my_users_col.delete_one(curr_user)
+                print(f"USER {curr_user} deleted!")
+
+    # for curr_number in request.values:
+    #     my_users_col.update_one({"number":curr_number}, {"$set": {"user_enabled": False}})
     return redirect('/seeUsers')
 
 # @app.route('/addUsersCompletion', methods=["POST"])
@@ -58,7 +95,7 @@ def remove_users():
 
 @app.route('/seeUsers')
 def see_users():
-    user_data = my_users_col.find({}, {"_id": 0, "first_name": 1, "last_name": 1, "number": 1})
+    user_data = my_users_col.find()
 
     return render_template("displayUsers.html", user_data=user_data)
 
