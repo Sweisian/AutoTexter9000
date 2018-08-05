@@ -27,9 +27,9 @@ table, th, td {
                 <tr>
                     <td>{{user.get("first_name")}}</td>
                     <td>{{user.get("last_name")}}</td>
-                    <td>{{user.get("number")}}</td>
+                    <td>{{user.get("_id")}}</td>
                     <td>{{user.get("user_enabled")}}</td>
-                    <td><input type="checkbox" name="{{user.get('number')}}" ></td>
+                    <td><input type="checkbox" name="{{user.get('_id')}}" ></td>
                 </tr>
                 {% endfor %}
             </table>

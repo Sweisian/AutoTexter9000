@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 #################### TEST COMMANDS #######################
 # for x in my_users_col.find():
-#     my_users_col.update_one(x, {"$set": {"user_enabled": True}})
+#     my_users_col.update_one(x)
 #
 # for x in my_users_col.find():
 #     print(x.get("user_enabled"))
@@ -45,7 +45,7 @@ def add_users():
             continue
         mydict = { "first_name": curr_first_name,
                    "last_name": curr_last_name,
-                   "number": curr_number,
+                   "_id": curr_number,
                    "user_enabled": True
                     }
         x = my_users_col.insert_one(mydict)
@@ -59,27 +59,25 @@ def alter_users():
     if request.values.get("enable_users"):
         print("ENABLE USERS")
         for val in request.values:
-            curr_user = my_users_col.find_one({"number":val})
+            curr_user = my_users_col.find_one({"_id":val})
             if curr_user:
                 my_users_col.update_one(curr_user, {"$set": {"user_enabled": True}})
                 print(f"USER {curr_user} enabled!")
     if request.values.get("disable_users"):
         print("DISABLE USERS")
         for val in request.values:
-            curr_user = my_users_col.find_one({"number":val})
+            curr_user = my_users_col.find_one({"_id":val})
             if curr_user:
                 my_users_col.update_one(curr_user, {"$set": {"user_enabled": False}})
                 print(f"USER {curr_user} disabled!")
     if request.values.get("delete_users"):
         print("DELETE USERS")
         for val in request.values:
-            curr_user = my_users_col.find_one({"number":val})
+            curr_user = my_users_col.find_one({"_id":val})
             if curr_user:
                 my_users_col.delete_one(curr_user)
                 print(f"USER {curr_user} deleted!")
 
-    # for curr_number in request.values:
-    #     my_users_col.update_one({"number":curr_number}, {"$set": {"user_enabled": False}})
     return redirect('/seeUsers')
 
 # @app.route('/addUsersCompletion', methods=["POST"])
@@ -109,7 +107,7 @@ def send_text_form():
 def send_text():
     my_number = '+19142268654'
 
-    user_data = my_users_col.find({}, {"_id": 0, "first_name": 1, "last_name": 1, "number": 1})
+    user_data = my_users_col.find()
 
     # for curr_user in user_data:
     #     curr_num = curr_user["number"]
