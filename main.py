@@ -1,15 +1,9 @@
 from flask import Flask, render_template, request, redirect
-import bandwidth
 import os
+import plivo
 import pymongo
 
-user_id = os.environ['BANDWIDTH_USER_ID']
-api_token = os.environ['BANDWIDTH_API_TOKEN']
-api_secret = os.environ['BANDWIDTH_API_SECRET']
 
-voice_api = bandwidth.client('voice', user_id, api_token, api_secret)
-messaging_api = bandwidth.client('messaging',  user_id, api_token, api_secret)
-account_api = bandwidth.client('account',  user_id, api_token, api_secret)
 
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
 mydb = myclient["pioneers_of_interactive_entertainment_nu"]
@@ -39,7 +33,7 @@ def add_users():
         if curr_first_name == '' or curr_number == '':
             print(f"Did not insert name for row {i}. Data is missing.")
             continue
-        elif my_users_col.find_one({"number" : curr_number}):
+        elif my_users_col.find_one({"number": curr_number}):
             print(my_users_col.find({"number": curr_number}))
             print(f"{curr_number} at row {i} is already in the database")
             continue
@@ -105,17 +99,29 @@ def send_text_form():
 
 @app.route('/sendText', methods=["POST"])
 def send_text():
-    my_number = '+19142268654'
+    my_number = '+14844840496'
 
     user_data = my_users_col.find()
 
-    # for curr_user in user_data:
-    #     curr_num = curr_user["number"]
-    #     print(curr_num)
-    #     message_id = messaging_api.send_message(from_=my_number, to='+1' + curr_num, text=request.form['userinput'])
+    client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
+    for curr_user in user_data:
+        curr_num = curr_user["_id"]
+        try:
+            response = client.messages.create(
+                src=my_number,
+                dst='+1' + curr_num,
+                text=request.form['userinput'],
+            )
+            print(response.__dict__)
+        except plivo.exceptions.PlivoRestError as e:
+            print(e)
+
+        # curr_num = curr_user["_id"]
+        # print(curr_num)
+        # message_id = messaging_api.send_message(from_=my_number, to='+1' + curr_num, text=request.form['userinput'])
 
     #TODO: REMOVE TEMP HARDCODE
-    message_id = messaging_api.send_message(from_=my_number, to='+1' + "2033219249", text=request.form['userinput'])
+    # message_id = messaging_api.send_message(from_=my_number, to='+1' + "2033219249", text=request.form['userinput'])
 
     return render_template("sendText.html")
 
