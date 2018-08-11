@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <form method=POST action="{{ url_for('send_text') }}", id="userform">
+            <form method=POST action="{{ url_for('send_bulk_text') }}", id="userform">
                 <button type="submit" class="btn btn-primary btn-block">Send Text!</button>
             </form>
             <textarea name="userinput" form="userform", cols="40" rows="5", placeholder="Enter text here..."></textarea>

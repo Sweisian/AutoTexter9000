@@ -3,7 +3,7 @@ import os
 import plivo
 import pymongo
 
-
+my_number = '+14844840496'
 
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
 mydb = myclient["pioneers_of_interactive_entertainment_nu"]
@@ -97,24 +97,17 @@ def send_text_form():
     return render_template("sendText.html")
 
 
-@app.route('/sendText', methods=["POST"])
-def send_text():
-    my_number = '+14844840496'
+@app.route('/sendBulkText', methods=["POST"])
+def send_bulk_text():
+
 
     user_data = my_users_col.find()
 
     client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
     for curr_user in user_data:
-        curr_num = curr_user["_id"]
-        try:
-            response = client.messages.create(
-                src=my_number,
-                dst='+1' + curr_num,
-                text=request.form['userinput'],
-            )
-            print(response.__dict__)
-        except plivo.exceptions.PlivoRestError as e:
-            print(e)
+        if curr_user.get("user_enabled"):
+            curr_num = curr_user["_id"]
+            send_single_text(client, curr_num, my_number, request.values.get("userinput"))
 
         # curr_num = curr_user["_id"]
         # print(curr_num)
@@ -125,6 +118,55 @@ def send_text():
 
     return render_template("sendText.html")
 
+
+def send_single_text(client, my_number, dest_number, msg):
+    print("Sending text to " + dest_number)
+    print("Text Content: " + msg)
+    try:
+        response = client.messages.create(
+            src=my_number,
+            dst='+' + dest_number,
+            text=msg,
+        )
+        print(response.__dict__)
+
+    except plivo.exceptions.PlivoRestError as e:
+        print(e)
+
+
+@app.route('/recieveText', methods=["POST"])
+def receive_sms():
+
+
+    # Sender's phone numer
+    from_number = request.values.get('From')
+    # Receiver's phone number - Plivo number
+    to_number = request.values.get('To')
+    # The text which was received
+    text = request.values.get('Text')
+
+    #Don't do anything if user number is not in database
+    curr_user = my_users_col.find_one({"_id": from_number})
+    if not curr_user:
+        return "Message received", 200
+
+    if str(text).lower() == "stop":
+        if curr_user.get("user_enabled"):
+            my_users_col.update_one(curr_user, {"$set": {"user_enabled": False}})
+            client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
+            send_single_text(client, my_number, from_number, "You are unsubscribed. If you wish to resubscribe, please reply with 'START'")
+
+    if str(text).lower() == "start":
+       if not curr_user.get("user_enabled"):
+            my_users_col.update_one(curr_user, {"$set": {"user_enabled": True}})
+
+            client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
+            send_single_text(client, my_number, from_number, "You have been resubscribed! To unsubscribe, reply 'STOP'")
+
+    #Print the message
+    print('Message received - From: %s, To: %s, Text: %s' % (from_number, to_number, text))
+
+    return "Message received", 200
 
 
 if __name__ == '__main__':
