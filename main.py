@@ -121,7 +121,7 @@ def send_bulk_text():
     for curr_user in user_data:
         if curr_user.get("user_enabled"):
             curr_num = curr_user["_id"]
-            send_single_text(client, curr_num, my_number, request.values.get("userinput"))
+            send_single_text(client, my_number, curr_num, request.values.get("userinput"))
 
         # curr_num = curr_user["_id"]
         # print(curr_num)
