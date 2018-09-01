@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
+
+<div class="container">
+    <div class="row">
+            <table style="width:100%">
+                <tr>
+                    <th>ATTEMPTED TO ADD USERS:</th>
+                </tr>
+                {% for user in user_data %}
+                <tr>
+                    <td>{{user}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        <div class="col-md-4 col-md-offset-4">
+            <br>
+            <div>
+                Back to adding users <a href="{{ url_for('index') }}">here</a>.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

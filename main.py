@@ -50,11 +50,7 @@ def add_users():
 
         return_message_list.append(add_single_user(curr_first_name, curr_last_name, curr_number))
 
-    return redirect('/seeUsers')
-
-@app.route('/addUsersResults')
-def add_users_results():
-    return render_template('index.html')
+    return render_template("addedUsers.html", user_data=return_message_list)
 
 
 def is_in_database(curr_number):
@@ -245,12 +241,14 @@ def add_single_user(curr_first_name, curr_last_name, curr_number):
     return_msg = "ERROR. THERE SHOULD BE SOMETHING ELSE HERE"
 
     if not is_valid_user:
-        return_msg = f'NOT ADDED!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})\n'
-        return_msg += f'\t' + sanitization_msg
+        return_msg = f'NOT ADDED!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
+        return_msg += '\n' + sanitization_msg
+        print(return_msg)
         return return_msg
     elif is_in_database(curr_number):
-        return_msg = f'NOT ADDED!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})\n'
-        return_msg += f'\t' + "USER IS ALREADY IN DATABASE (KEYED FROM PHONE NUMBER)"
+        return_msg = f'NOT ADDED!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
+        return_msg += '\n' + "USER IS ALREADY IN DATABASE (KEYED FROM PHONE NUMBER)"
+        print(return_msg)
         return return_msg
     elif is_valid_user and not is_in_database(curr_number):
         mydict = {"first_name": curr_first_name,
