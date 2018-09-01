@@ -1,7 +1,7 @@
-phonenumbers = 8.9.10
-plivo = 4.2.0a3
-pymongo = 3.7.1
-Flask = 1.0.2
-requests = 2.19.1
-Werkzeug = 0.14.1
-gunicorn = 19.9.0
+phonenumbers == 8.9.10
+plivo == 4.2.0a3
+pymongo == 3.7.1
+Flask == 1.0.2
+requests == 2.19.1
+Werkzeug == 0.14.1
+gunicorn == 19.9.0
