@@ -250,9 +250,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def handle_job():
-    my_jobs_col = mydb["jobs"]
-    for job in my_jobs_col.find():
+def handle_single_job(job):
 
         user_date = job["date"]
         user_time = job["time"]
