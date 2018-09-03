@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <form method=POST action="{{ url_for('store_job') }}", id="userform">
+                <button type="submit" class="btn btn-primary btn-block">Que Job to execute!</button>
+                <br>
+                <textarea name="userinput" form="userform", cols="40" rows="5", placeholder="Enter text here..."></textarea>
+                <br>
+                Select a date: <input type="date" form="userform" name="userdate"> <br>
+                Select a time: <input type="time" form="userform" name="usertime">
+
+            </form>
+
+            <p><strong>Note:</strong> type="date" is not supported in Safari or Internet Explorer 11 (or earlier). <br>
+
+            <strong>Note:</strong> type="time" is not supported in Safari or Internet Explorer 12 and earlier versions.</p> <br>
+
+
+            <div>
+                Back to adding users <a href="{{ url_for('index') }}">here</a>.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

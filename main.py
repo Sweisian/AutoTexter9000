@@ -1,6 +1,8 @@
 import csv
+import datetime
 
-from flask import Flask, flash, render_template, send_from_directory, request, redirect, url_for
+import pytz
+from flask import Flask, flash, render_template, send_from_directory, request, redirect
 import os
 import plivo
 import pymongo
@@ -18,6 +20,7 @@ ALLOWED_EXTENSIONS = set(['csv'])
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
 mydb = myclient["pioneers_of_interactive_entertainment_nu"]
 my_users_col = mydb["users"]
+
 app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -51,15 +54,6 @@ def add_users():
         return_message_list.append(add_single_user(curr_first_name, curr_last_name, curr_number))
 
     return render_template("addedUsers.html", user_data=return_message_list)
-
-
-def is_in_database(curr_number):
-    if my_users_col.find_one({"_id": curr_number}):
-        print(my_users_col.find({"_id": curr_number}))
-        print(f"{curr_number} is already in the database")
-        return True
-    else:
-        return False
 
 
 @app.route('/alterUsers', methods=["POST"])
@@ -112,8 +106,9 @@ def send_text_form():
 
 
 @app.route('/sendBulkText', methods=["POST"])
-def send_bulk_text():
-
+def send_bulk_text(message_to_send = None):
+    if not message_to_send:
+        message_to_send = request.values.get("userinput")
 
     user_data = my_users_col.find()
 
@@ -121,7 +116,7 @@ def send_bulk_text():
     for curr_user in user_data:
         if curr_user.get("user_enabled"):
             curr_num = curr_user["_id"]
-            send_single_text(client, my_number, curr_num, request.values.get("userinput"))
+            send_single_text(client, my_number, curr_num, message_to_send)
 
         # curr_num = curr_user["_id"]
         # print(curr_num)
@@ -131,21 +126,6 @@ def send_bulk_text():
     # message_id = messaging_api.send_message(from_=my_number, to='+1' + "2033219249", text=request.form['userinput'])
 
     return render_template("sendText.html")
-
-
-def send_single_text(client, my_number, dest_number, msg):
-    print("Sending text to " + dest_number)
-    print("Text Content: " + msg)
-    try:
-        response = client.messages.create(
-            src=my_number,
-            dst='+' + dest_number,
-            text=msg,
-        )
-        print(response.__dict__)
-
-    except plivo.exceptions.PlivoRestError as e:
-        print(e)
 
 
 @app.route('/recieveText', methods=["POST"])
@@ -181,11 +161,6 @@ def receive_sms():
     return "Message received", 200
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 @app.route('/uploadHandler', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -209,6 +184,106 @@ def upload_file():
             #return redirect(url_for('uploaded_file',filename=filename))
 
     return render_template('uploadFile.html')
+
+
+@app.route('/scheduleMessage', methods=['GET'])
+def schedule_message():
+    return render_template('scheduleJob.html')
+
+
+@app.route('/storeJob', methods=['POST'])
+def store_job():
+    for val in request.values:
+        print(val, request.values[val])
+
+    date = request.form['userdate']
+    time = request.form['usertime']
+    message = request.form['userinput']
+
+    my_jobs_col = mydb["jobs"]
+    mydict = {"date": date,
+              "time": time,
+              "message": message
+              }
+    my_jobs_col.insert_one(mydict)
+    return render_template('scheduleJob.html')
+
+# Gonna have to do something smarter than this in the future. Not scalable to loop over all entries
+
+
+@app.route('/get_uploads/<filename>')
+def uploaded_file(filename):
+    return "Thanks for uploading!"
+    # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=8080, debug=True)
+
+
+def is_in_database(curr_number):
+    if my_users_col.find_one({"_id": curr_number}):
+        print(my_users_col.find({"_id": curr_number}))
+        print(f"{curr_number} is already in the database")
+        return True
+    else:
+        return False
+
+
+def send_single_text(client, my_number, dest_number, msg):
+    print("Sending text to " + dest_number)
+    print("Text Content: " + msg)
+    try:
+        response = client.messages.create(
+            src=my_number,
+            dst='+' + dest_number,
+            text=msg,
+        )
+        print(response.__dict__)
+
+    except plivo.exceptions.PlivoRestError as e:
+        print(e)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def handle_job():
+    my_jobs_col = mydb["jobs"]
+    for job in my_jobs_col.find():
+
+        user_date = job["date"]
+        user_time = job["time"]
+        message_to_send = job["message"]
+
+        my_datetime_s = f"{user_date} {user_time}"
+        naive_scheduled = datetime.datetime.strptime(my_datetime_s, "%Y-%m-%d %H:%M")
+        print(f"MY DATE TIME = {naive_scheduled}")
+
+        local = pytz.timezone("America/Chicago")
+        now_time_chicago = datetime.datetime.now(local)
+        print(f"CHICAGO TIME = {now_time_chicago}")
+
+        utc = pytz.UTC
+
+        naive_scheduled = utc.localize(naive_scheduled)
+        #now_time_chicago = utc.localize(now_time_chicago)
+        print(f"LOCALIZED NAIVE SCHEDULED = {naive_scheduled}")
+
+        should_execute = naive_scheduled <= now_time_chicago
+
+        print(naive_scheduled <= now_time_chicago)
+        print()
+
+        if should_execute:
+            send_bulk_text(message_to_send)
+
+        # local_dt = local.localize(naive, is_dst=None)
+        # utc_dt = local_dt.astimezone(pytz.utc)
+
+
 
 def bulk_upload_to_database(filename):
     with open(UPLOAD_FOLDER + "/" + filename) as csv_file:
@@ -260,15 +335,3 @@ def add_single_user(curr_first_name, curr_last_name, curr_number):
 
         return_msg = f'ADDED TO DATABASE FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})\n'
     return return_msg
-
-
-
-@app.route('/get_uploads/<filename>')
-def uploaded_file(filename):
-    return "Thanks for uploading!"
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
-
-
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
