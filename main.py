@@ -106,7 +106,7 @@ def send_text_form():
 
 
 @app.route('/sendBulkText', methods=["POST"])
-def send_bulk_text(message_to_send = None):
+def send_bulk_text(message_to_send=None):
     if not message_to_send:
         message_to_send = request.values.get("userinput")
 
