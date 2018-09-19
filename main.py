@@ -7,6 +7,7 @@ import pymongo
 from werkzeug.utils import secure_filename
 
 import inputSanitization
+from utilities import send_single_text
 
 my_number = '+14844840496'
 
@@ -224,21 +225,6 @@ def is_in_database(curr_number):
         return True
     else:
         return False
-
-
-def send_single_text(client, my_number, dest_number, msg):
-    print("Sending text to " + dest_number)
-    print("Text Content: " + msg)
-    try:
-        response = client.messages.create(
-            src=my_number,
-            dst='+' + dest_number,
-            text=msg,
-        )
-        print(response.__dict__)
-
-    except plivo.exceptions.PlivoRestError as e:
-        print(e)
 
 
 def allowed_file(filename):

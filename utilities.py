@@ -4,7 +4,7 @@ import os
 import plivo
 import pytz
 
-from main import my_users_col, send_single_text, my_number, send_bulk_text
+from main import my_users_col, my_number
 
 
 def standalone_send_bulk_text(message_to_send):
@@ -46,7 +46,22 @@ def handle_single_job(job):
         print()
 
         if should_execute:
-            send_bulk_text(message_to_send)
+            standalone_send_bulk_text(message_to_send)
 
         # local_dt = local.localize(naive, is_dst=None)
         # utc_dt = local_dt.astimezone(pytz.utc)
+
+
+def send_single_text(client, my_number, dest_number, msg):
+    print("Sending text to " + dest_number)
+    print("Text Content: " + msg)
+    try:
+        response = client.messages.create(
+            src=my_number,
+            dst='+' + dest_number,
+            text=msg,
+        )
+        print(response.__dict__)
+
+    except plivo.exceptions.PlivoRestError as e:
+        print(e)
