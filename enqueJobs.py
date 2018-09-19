@@ -12,5 +12,5 @@ def enque_job():
     my_jobs_col = mydb["jobs"]
     for job in my_jobs_col.find():
         print(f"\nCURRENT JOB IS: {job}\n")
-        q.enqueue(handle_single_job(job))
+        q.enqueue(handle_single_job, job)
     #result = q.enqueue(count_words_at_url, 'http://heroku.com')
