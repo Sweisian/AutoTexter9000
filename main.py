@@ -125,7 +125,8 @@ def send_bulk_text(message_to_send=None):
     #TODO: REMOVE TEMP HARDCODE
     # message_id = messaging_api.send_message(from_=my_number, to='+1' + "2033219249", text=request.form['userinput'])
 
-    return render_template("sendText.html")
+    if not message_to_send:
+        return render_template("sendText.html")
 
 
 @app.route('/recieveText', methods=["POST"])
