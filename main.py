@@ -15,7 +15,7 @@ my_number = '+14844840496'
 UPLOAD_FOLDER = './uploads'
 ALLOWED_EXTENSIONS = set(['csv'])
 
-
+#TODO: MAKE THIS A FUNCTION, REPLACE MAIN STUFF WITH FUNCTION
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
 mydb = myclient["pioneers_of_interactive_entertainment_nu"]
 my_users_col = mydb["users"]

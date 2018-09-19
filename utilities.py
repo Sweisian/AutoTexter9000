@@ -4,8 +4,14 @@ import os
 import plivo
 import pytz
 
-from main import my_users_col, my_number
+import pymongo
 
+#TODO: MAKE THIS A FUNCTION, REPLACE MAIN STUFF WITH FUNCTION
+myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
+mydb = myclient["pioneers_of_interactive_entertainment_nu"]
+my_users_col = mydb["users"]
+
+my_number = '+14844840496'
 
 def standalone_send_bulk_text(message_to_send):
     user_data = my_users_col.find()
