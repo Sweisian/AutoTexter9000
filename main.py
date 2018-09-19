@@ -271,6 +271,7 @@ def handle_single_job(job):
         print(f"LOCALIZED NAIVE SCHEDULED = {naive_scheduled}")
 
         should_execute = naive_scheduled <= now_time_chicago
+        should_execute = True
 
         print(naive_scheduled <= now_time_chicago)
         print()
