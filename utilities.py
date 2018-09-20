@@ -32,19 +32,18 @@ def handle_single_job(job):
         message_to_send = job["message"]
 
         my_datetime_s = f"{user_date} {user_time}"
-        print(f"my_datetime_s = {my_datetime_s}")
+        #print(f"my_datetime_s = {my_datetime_s}")
         naive_scheduled = datetime.datetime.strptime(my_datetime_s, "%Y-%m-%d %H:%M")
-        print(f"JOB DATE TIME = {naive_scheduled}")
-
-        local = pytz.timezone("America/Chicago")
-        now_time_chicago = datetime.datetime.now(local)
-        print(f"CHICAGO TIME = {now_time_chicago}")
-
-        utc = pytz.UTC
-
-        naive_scheduled = utc.localize(naive_scheduled)
-        #now_time_chicago = utc.localize(now_time_chicago)
+        #print(f"JOB DATE TIME = {naive_scheduled}")
         print(f"LOCALIZED JOB SCHEDULED = {naive_scheduled}")
+
+        chicago_tz = pytz.timezone("America/Chicago")
+        now_time_chicago = datetime.datetime.now(chicago_tz)
+        now_time_chicago = now_time_chicago.replace(tzinfo=None)
+        print(f"CURRENT CHICAGO TIME = {now_time_chicago}")
+
+        # my_timedelta = now_time_chicago - naive_scheduled
+        # print(f"my_timedelta = {my_timedelta}")
 
         should_execute = naive_scheduled <= now_time_chicago
 
