@@ -1,6 +1,6 @@
 import csv
 
-from flask import Flask, flash, render_template, request, redirect
+from flask import Flask, flash, render_template, url_for, request, redirect
 import os
 import plivo
 import pymongo
@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 
 import inputSanitization
 from utilities import send_single_text
+from bson.objectid import ObjectId
 
 my_number = '+14844840496'
 
@@ -106,6 +107,11 @@ def send_text_form():
 
 @app.route('/sendBulkText', methods=["POST"])
 def send_bulk_text(message_to_send=None):
+
+    #This is when we are triggering a message manually
+    if not message_to_send:
+        message_to_send = request.values["userinput"]
+
     user_data = my_users_col.find()
 
     client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
@@ -183,29 +189,50 @@ def upload_file():
     return render_template('uploadFile.html')
 
 
-@app.route('/scheduleMessage', methods=['GET'])
+@app.route('/scheduleMessage', methods=['GET', "POST"])
 def schedule_message():
-    return render_template('scheduleJob.html')
+    if request.method == "GET":
+        my_jobs_col = mydb["jobs"]
+        job_data = my_jobs_col.find()
+        return render_template('scheduleJob.html', job_data=job_data)
+    elif request.method == "POST":
+        for val in request.values:
+            print(val, request.values[val])
 
+        date = request.form['userdate']
+        time = request.form['usertime']
+        message = request.form['userinput']
 
-@app.route('/storeJob', methods=['POST'])
-def store_job():
-    for val in request.values:
-        print(val, request.values[val])
+        my_jobs_col = mydb["jobs"]
+        mydict = {"date": date,
+                  "time": time,
+                  "message": message
+                  }
+        my_jobs_col.insert_one(mydict)
+        return redirect(url_for('schedule_message'))
 
-    date = request.form['userdate']
-    time = request.form['usertime']
-    message = request.form['userinput']
-
-    my_jobs_col = mydb["jobs"]
-    mydict = {"date": date,
-              "time": time,
-              "message": message
-              }
-    my_jobs_col.insert_one(mydict)
-    return render_template('scheduleJob.html')
 
 # Gonna have to do something smarter than this in the future. Not scalable to loop over all entries
+
+@app.route('/alterJobs', methods=["POST"])
+def alter_jobs():
+    my_jobs_col = mydb["jobs"]
+    if request.values.get("delete_jobs"):
+        print("DELETE JOBS")
+        for val in request.values:
+            print("this is val for alter jobs", val)
+
+            # TODO: This is kinda jank, find a better way to only get _id values
+            if val != "delete_jobs":
+                curr_job = my_jobs_col.find_one({"_id": ObjectId(val)})
+            else:
+                continue
+
+            if curr_job:
+                my_jobs_col.delete_one(curr_job)
+                print(f"JOB {curr_job} deleted!")
+
+    return redirect('/scheduleMessage')
 
 
 @app.route('/get_uploads/<filename>')

@@ -32,8 +32,9 @@ def handle_single_job(job):
         message_to_send = job["message"]
 
         my_datetime_s = f"{user_date} {user_time}"
+        print(f"my_datetime_s = {my_datetime_s}")
         naive_scheduled = datetime.datetime.strptime(my_datetime_s, "%Y-%m-%d %H:%M")
-        print(f"MY DATE TIME = {naive_scheduled}")
+        print(f"JOB DATE TIME = {naive_scheduled}")
 
         local = pytz.timezone("America/Chicago")
         now_time_chicago = datetime.datetime.now(local)
@@ -43,19 +44,16 @@ def handle_single_job(job):
 
         naive_scheduled = utc.localize(naive_scheduled)
         #now_time_chicago = utc.localize(now_time_chicago)
-        print(f"LOCALIZED NAIVE SCHEDULED = {naive_scheduled}")
+        print(f"LOCALIZED JOB SCHEDULED = {naive_scheduled}")
 
         should_execute = naive_scheduled <= now_time_chicago
-        should_execute = True
 
-        print(naive_scheduled <= now_time_chicago)
+        print(f"Will Execute?: {should_execute}")
         print()
 
         if should_execute:
             standalone_send_bulk_text(message_to_send)
-
-        # local_dt = local.localize(naive, is_dst=None)
-        # utc_dt = local_dt.astimezone(pytz.utc)
+            mydb["jobs"].delete_one(job)
 
 
 def send_single_text(client, my_number, dest_number, msg):
@@ -71,3 +69,8 @@ def send_single_text(client, my_number, dest_number, msg):
 
     except plivo.exceptions.PlivoRestError as e:
         print(e)
+
+
+# my_jobs_col = mydb["jobs"]
+# for job in my_jobs_col.find():
+#     handle_single_job(job)

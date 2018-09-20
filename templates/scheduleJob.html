@@ -1,9 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
+
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
+
 <div class="container">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <form method=POST action="{{ url_for('store_job') }}", id="userform">
+            <form method=POST action="{{ url_for('schedule_message') }}", id="userform">
                 <button type="submit" class="btn btn-primary btn-block">Que Job to execute!</button>
                 <br>
                 <textarea name="userinput" form="userform", cols="40" rows="5", placeholder="Enter text here..."></textarea>
@@ -17,11 +25,35 @@
 
             <strong>Note:</strong> type="time" is not supported in Safari or Internet Explorer 12 and earlier versions.</p> <br>
 
-
-            <div>
-                Back to adding users <a href="{{ url_for('index') }}">here</a>.
-            </div>
         </div>
+        <br>
+        <div>
+            <form action= "{{ url_for('alter_jobs') }}" method=POST>
+            <input type="submit" name="delete_jobs" value="DELETE Selected Jobs">
+                <table style="width:100%">
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Message</th>
+                        <th>Select Job</th>
+                    </tr>
+                    {% for job in job_data %}
+                    <tr>
+                        <td>{{job.get("date")}}</td>
+                        <td>{{job.get("time")}}</td>
+                        <td>{{job.get("message")}}</td>
+                        <td><input type="checkbox" name="{{job.get('_id')}}" ></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+        <div>
+                <br>
+                Back to adding users <a href="{{ url_for('index') }}">here</a>.
+        </div>
+
+
     </div>
 </div>
 {% endblock %}
