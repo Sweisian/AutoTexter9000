@@ -9,6 +9,21 @@ table, th, td {
 </style>
 
 <div class="container">
+    <div>
+        <form method=POST action="{{ url_for('see_users') }}">
+            <select name="collectionName">
+                {% for name in collection_list %}
+                    <option value="{{name}}" >{{name}}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary btn-block">Choose Collection</button>
+        </form>
+    </div>
+
+    <div>
+        <H3>Current Collection: {{cur_col}}</H3>
+    </div>
+
     <div class="row">
         <form action= "{{ url_for('alter_users') }}" method=POST>
             <input type="submit" name="disable_users" value="Disable Selected Users">

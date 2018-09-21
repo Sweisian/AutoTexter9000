@@ -111,16 +111,37 @@ def delete_collection():
     curr_col.drop()
     return redirect(url_for("index"))
 
-@app.route('/seeUsers')
+
+@app.route('/seeUsers', methods=["GET", "POST"])
 def see_users():
-    user_data = my_users_col.find()
+    collection = request.values.get("collectionName")
+    if collection:
+        user_data = mydb[collection].find()
+        cur_col = collection
+    else:
+        #Dummy filler data
+        user_data = [{"first_name": "No Collection selected",
+                      "last_name": "No Collection selected",
+                      "_id": "No Collection selected",
+                      "user_enabled": False
+                      }]
+        cur_col = "None Selected"
 
-    return render_template("displayUsers.html", user_data=user_data)
+    collection_list = utilities.col_list_santitized()
+    return render_template("displayUsers.html", user_data=user_data, collection_list=collection_list, cur_col=cur_col)
 
 
-@app.route('/sendTextForm')
+@app.route('/sendTextForm', methods=["GET", "POST"])
 def send_text_form():
-    return render_template("sendText.html")
+
+    collection = request.values.get("collectionName")
+    if collection:
+        cur_col = collection
+    else:
+        cur_col = "None Selected"
+
+    collection_list = utilities.col_list_santitized()
+    return render_template("sendText.html", collection_list=collection_list)
 
 
 @app.route('/sendBulkText', methods=["POST"])
@@ -294,7 +315,7 @@ def bulk_upload_to_database(filename):
                 curr_last_name = row[1]
                 curr_number = row[2]
 
-                return_string += add_single_user(curr_first_name, curr_last_name, curr_number)
+                return_string += utilities.add_single_user(curr_first_name, curr_last_name, curr_number)
 
                 line_count += 1
         print(f'Processed {line_count} lines.')
