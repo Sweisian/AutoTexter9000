@@ -6,8 +6,7 @@ import plivo
 import pymongo
 from werkzeug.utils import secure_filename
 
-import inputSanitization
-from utilities import send_single_text
+import utilities
 from bson.objectid import ObjectId
 
 my_number = '+14844840496'
@@ -36,24 +35,22 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #################### TEST COMMANDS #######################
 
 
-@app.route('/')
+@app.route('/', methods=["GET"])
 def index():
-    return render_template('index.html')
+    collection_list = utilities.col_list_santitized()
+    return render_template('index.html', collection_list=collection_list)
 
 
 @app.route('/addUsers', methods=["POST"])
 def add_users():
-
     return_message_list = []
-    for i in range(0,9):
-
+    for i in range(0, 9):
         curr_first_name = request.form['firstName' + str(i)]
         curr_last_name = request.form['lastName' + str(i)]
         curr_number = request.form['number' + str(i)]
-
-        return_message_list.append(add_single_user(curr_first_name, curr_last_name, curr_number))
-
-    return render_template("addedUsers.html", user_data=return_message_list)
+        curr_collection = request.values['collectionName']
+        return_message_list.append(utilities.add_single_user(curr_first_name, curr_last_name, curr_number, curr_collection))
+    return render_template("addedUsers.html", user_data=return_message_list, )
 
 
 @app.route('/alterUsers', methods=["POST"])
@@ -92,6 +89,27 @@ def alter_users():
 #             x = my_users_col.insert_one(mydict)
 #     return redirect('/seeUsers')
 
+@app.route('/createCollection', methods=["POST"])
+def create_collection():
+    collection_name = request.values["collectionName"]
+
+    if collection_name == "system.indexes" or collection_name == "jobs":
+        #TODO: Put flash in here
+        return redirect(url_for("index"))
+
+    new_collection = mydb[collection_name]
+    temp_dict = {"_id": "test"}
+    new_collection.insert_one(temp_dict)
+    new_collection.delete_one(temp_dict)
+
+    return redirect(url_for("index"))
+
+@app.route('/deleteCollection', methods=["POST"])
+def delete_collection():
+    name = request.values["collectionName"]
+    curr_col = mydb[name]
+    curr_col.drop()
+    return redirect(url_for("index"))
 
 @app.route('/seeUsers')
 def see_users():
@@ -245,10 +263,10 @@ if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
 
 
-def is_in_database(curr_number):
-    if my_users_col.find_one({"_id": curr_number}):
-        print(my_users_col.find({"_id": curr_number}))
-        print(f"{curr_number} is already in the database")
+def is_in_database(curr_number, collection):
+    if mydb[collection].find_one({"_id": curr_number}):
+        print(mydb[collection].find({"_id": curr_number}))
+        print(f"{curr_number} is already in this collection")
         return True
     else:
         return False
@@ -283,29 +301,3 @@ def bulk_upload_to_database(filename):
         return return_string
 
 
-def add_single_user(curr_first_name, curr_last_name, curr_number):
-    is_valid_user, sanitization_msg = inputSanitization.input_sanitizer(curr_first_name, curr_last_name,
-                                                                        curr_number)
-
-    return_msg = "ERROR. THERE SHOULD BE SOMETHING ELSE HERE"
-
-    if not is_valid_user:
-        return_msg = f'NOT ADDED!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
-        return_msg += '\n' + sanitization_msg
-        print(return_msg)
-        return return_msg
-    elif is_in_database(curr_number):
-        return_msg = f'NOT ADDED!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
-        return_msg += '\n' + "USER IS ALREADY IN DATABASE (KEYED FROM PHONE NUMBER)"
-        print(return_msg)
-        return return_msg
-    elif is_valid_user and not is_in_database(curr_number):
-        mydict = {"first_name": curr_first_name,
-                  "last_name": curr_last_name,
-                  "_id": curr_number,
-                  "user_enabled": True
-                  }
-        my_users_col.insert_one(mydict)
-
-        return_msg = f'ADDED TO DATABASE FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})\n'
-    return return_msg

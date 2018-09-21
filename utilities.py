@@ -7,6 +7,9 @@ import pytz
 import pymongo
 
 #TODO: MAKE THIS A FUNCTION, REPLACE MAIN STUFF WITH FUNCTION
+import inputSanitization
+from main import is_in_database, mydb
+
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
 mydb = myclient["pioneers_of_interactive_entertainment_nu"]
 my_users_col = mydb["users"]
@@ -70,6 +73,41 @@ def send_single_text(client, my_number, dest_number, msg):
         print(e)
 
 
+def col_list_santitized():
+    collection_list = mydb.list_collection_names()
+    #TODO: this is not a great way to do this either
+    collection_list.remove("jobs")
+    collection_list.remove("system.indexes")
+    return collection_list
+
 # my_jobs_col = mydb["jobs"]
 # for job in my_jobs_col.find():
 #     handle_single_job(job)
+def add_single_user(curr_first_name, curr_last_name, curr_number, collection):
+    is_valid_user, sanitization_msg = inputSanitization.input_sanitizer(curr_first_name, curr_last_name,
+                                                                        curr_number)
+
+    return_msg = "ERROR. THERE SHOULD BE SOMETHING ELSE HERE"
+
+    print(f"COLLECTION IS {collection}")
+
+    if not is_valid_user:
+        return_msg = f'NOT ADDED TO {collection}!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
+        return_msg += '\n' + sanitization_msg
+        print(return_msg)
+        return return_msg
+    elif is_in_database(curr_number, collection):
+        return_msg = f'NOT ADDED!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
+        return_msg += '\n' + f"USER IS ALREADY IN  COLLECTION {collection} (KEYED FROM PHONE NUMBER)"
+        print(return_msg)
+        return return_msg
+    elif is_valid_user and not is_in_database(curr_number, collection):
+        mydict = {"first_name": curr_first_name,
+                  "last_name": curr_last_name,
+                  "_id": curr_number,
+                  "user_enabled": True
+                  }
+        mydb[collection].insert_one(mydict)
+
+        return_msg = f'ADDED TO COLLECTION {collection} FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})\n'
+    return return_msg
