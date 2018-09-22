@@ -1,10 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
 <div class="container">
-    <div class="row">
 
     <div>
-        <form method=POST action="{{ url_for('see_users') }}">
+        <form method=POST action="{{ url_for('send_text_form')}}">
             <select name="collectionName">
                 {% for name in collection_list %}
                     <option value="{{name}}" >{{name}}</option>
@@ -21,6 +20,7 @@
         <div class="col-md-4 col-md-offset-4">
             <form method=POST action="{{ url_for('send_bulk_text') }}", id="userform">
                 <button type="submit" class="btn btn-primary btn-block">Send Text!</button>
+                <input type="hidden" value="{{cur_col}}" name="collectionName" />
             </form>
             <textarea name="userinput" form="userform", cols="40" rows="5", placeholder="Enter text here..."></textarea>
             <br>

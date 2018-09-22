@@ -17,7 +17,14 @@ table, th, td {
                 <textarea name="userinput" form="userform", cols="40" rows="5", placeholder="Enter text here..."></textarea>
                 <br>
                 Select a date: <input type="date" form="userform" name="userdate"> <br>
-                Select a time: <input type="time" form="userform" name="usertime">
+                Select a time: <input type="time" form="userform" name="usertime"> <br>
+                Select a collection:
+                <select name="collectionName">
+                    <option disabled selected value> -- select a collection -- </option>
+                    {% for name in collection_list %}
+                        <option value="{{name}}" >{{name}}</option>
+                    {% endfor %}
+                </select>
 
             </form>
 
@@ -34,6 +41,7 @@ table, th, td {
                     <tr>
                         <th>Date</th>
                         <th>Time</th>
+                        <th>Collection</th>
                         <th>Message</th>
                         <th>Select Job</th>
                     </tr>
@@ -41,6 +49,7 @@ table, th, td {
                     <tr>
                         <td>{{job.get("date")}}</td>
                         <td>{{job.get("time")}}</td>
+                        <td>{{job.get("collection")}}</td>
                         <td>{{job.get("message")}}</td>
                         <td><input type="checkbox" name="{{job.get('_id')}}" ></td>
                     </tr>

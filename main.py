@@ -1,5 +1,3 @@
-import csv
-
 from flask import Flask, flash, render_template, url_for, request, redirect
 import os
 import plivo
@@ -8,6 +6,7 @@ from werkzeug.utils import secure_filename
 
 import utilities
 from bson.objectid import ObjectId
+
 
 my_number = '+14844840496'
 
@@ -138,10 +137,10 @@ def send_text_form():
     if collection:
         cur_col = collection
     else:
-        cur_col = "None Selected"
+        cur_col = None
 
     collection_list = utilities.col_list_santitized()
-    return render_template("sendText.html", collection_list=collection_list)
+    return render_template("sendText.html", collection_list=collection_list, cur_col=cur_col)
 
 
 @app.route('/sendBulkText', methods=["POST"])
@@ -151,89 +150,98 @@ def send_bulk_text(message_to_send=None):
     if not message_to_send:
         message_to_send = request.values["userinput"]
 
-    user_data = my_users_col.find()
+    collection = request.values["collectionName"]
+    if not collection:
+        #TODO: add flash here or something
+        return redirect(url_for("send_text_form"))
+
+    user_data = mydb[collection].find()
 
     client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
     for curr_user in user_data:
         if curr_user.get("user_enabled"):
             curr_num = curr_user["_id"]
-            send_single_text(client, my_number, curr_num, message_to_send)
-
-        # curr_num = curr_user["_id"]
-        # print(curr_num)
-        # message_id = messaging_api.send_message(from_=my_number, to='+1' + curr_num, text=request.form['userinput'])
-
-    #TODO: REMOVE TEMP HARDCODE
-    # message_id = messaging_api.send_message(from_=my_number, to='+1' + "2033219249", text=request.form['userinput'])
-
-    return render_template("sendText.html")
+            utilities.send_single_text(client, my_number, curr_num, message_to_send)
+    return redirect(url_for("send_text_form"))
 
 
-
-@app.route('/recieveText', methods=["POST"])
-def receive_sms():
-    # Sender's phone numer
-    from_number = request.values.get('From')
-    # Receiver's phone number - Plivo number
-    to_number = request.values.get('To')
-    # The text which was received
-    text = request.values.get('Text')
-
-    #Don't do anything if user number is not in database
-    curr_user = my_users_col.find_one({"_id": from_number})
-    if not curr_user:
-        return "Message received", 200
-
-    if str(text).lower() == "stop":
-        if curr_user.get("user_enabled"):
-            my_users_col.update_one(curr_user, {"$set": {"user_enabled": False}})
-            client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
-            send_single_text(client, my_number, from_number, "You are unsubscribed. If you wish to resubscribe, please reply with 'START'")
-
-    if str(text).lower() == "start":
-       if not curr_user.get("user_enabled"):
-            my_users_col.update_one(curr_user, {"$set": {"user_enabled": True}})
-
-            client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
-            send_single_text(client, my_number, from_number, "You have been resubscribed! To unsubscribe, reply 'STOP'")
-
-    #Print the message
-    print('Message received - From: %s, To: %s, Text: %s' % (from_number, to_number, text))
-
-    return "Message received", 200
+# @app.route('/recieveText', methods=["POST"])
+# def receive_sms():
+#     # Sender's phone numer
+#     from_number = request.values.get('From')
+#     # Receiver's phone number - Plivo number
+#     to_number = request.values.get('To')
+#     # The text which was received
+#     text = request.values.get('Text')
+#
+#     #Don't do anything if user number is not in database
+#     curr_user = my_users_col.find_one({"_id": from_number})
+#     if not curr_user:
+#         return "Message received", 200
+#
+#     if str(text).lower() == "stop":
+#         if curr_user.get("user_enabled"):
+#             my_users_col.update_one(curr_user, {"$set": {"user_enabled": False}})
+#             client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
+#             utilities.send_single_text(client, my_number, from_number, "You are unsubscribed. If you wish to resubscribe, please reply with 'START'")
+#
+#     if str(text).lower() == "start":
+#        if not curr_user.get("user_enabled"):
+#             my_users_col.update_one(curr_user, {"$set": {"user_enabled": True}})
+#
+#             client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
+#             utilities.send_single_text(client, my_number, from_number, "You have been resubscribed! To unsubscribe, reply 'STOP'")
+#
+#     #Print the message
+#     print('Message received - From: %s, To: %s, Text: %s' % (from_number, to_number, text))
+#
+#     return "Message received", 200
 
 
 @app.route('/uploadHandler', methods=['GET', 'POST'])
 def upload_file():
+
+    collection_list = utilities.col_list_santitized()
+
+    collection = request.values.get("collectionName")
+    cur_col = collection
+    print("\ncurrent collection is: ", cur_col)
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
+            print("\nNO FILE")
             flash('No file part')
-            return redirect(request.url)
+            return render_template('uploadFile.html', collection_list=collection_list, cur_col=cur_col)
         file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
+            print("\nNO SELECTED FILE")
             flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
+            return render_template('uploadFile.html', collection_list=collection_list, cur_col=cur_col)
+        if file and utilities.allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            return_string = bulk_upload_to_database(filename)
+            if cur_col:
+                return_string = utilities.bulk_upload_to_database(filename, cur_col)
+            else:
+                return_string = "Sorry, you did not select a database"
 
             return return_string
-            #return redirect(url_for('uploaded_file',filename=filename))
+            # return redirect(url_for('uploaded_file',filename=filename))
 
-    return render_template('uploadFile.html')
+    return render_template('uploadFile.html', collection_list=collection_list, cur_col=cur_col)
 
 
 @app.route('/scheduleMessage', methods=['GET', "POST"])
 def schedule_message():
+
     if request.method == "GET":
+        collection_list = utilities.col_list_santitized()
         my_jobs_col = mydb["jobs"]
         job_data = my_jobs_col.find()
-        return render_template('scheduleJob.html', job_data=job_data)
+        return render_template('scheduleJob.html', job_data=job_data, collection_list=collection_list)
     elif request.method == "POST":
         for val in request.values:
             print(val, request.values[val])
@@ -241,11 +249,13 @@ def schedule_message():
         date = request.form['userdate']
         time = request.form['usertime']
         message = request.form['userinput']
+        cur_col = request.form['collectionName']
 
         my_jobs_col = mydb["jobs"]
         mydict = {"date": date,
                   "time": time,
-                  "message": message
+                  "message": message,
+                  "collection": cur_col
                   }
         my_jobs_col.insert_one(mydict)
         return redirect(url_for('schedule_message'))
@@ -282,43 +292,5 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
-
-
-def is_in_database(curr_number, collection):
-    if mydb[collection].find_one({"_id": curr_number}):
-        print(mydb[collection].find({"_id": curr_number}))
-        print(f"{curr_number} is already in this collection")
-        return True
-    else:
-        return False
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def bulk_upload_to_database(filename):
-    with open(UPLOAD_FOLDER + "/" + filename) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
-
-        return_string = ""
-        for row in csv_reader:
-            if line_count == 0:
-                print(f'Column names are {", ".join(row)}')
-                line_count += 1
-            else:
-                print(f'\t FIRST NAME:{row[0]} LAST NAME:{row[1]} PHONE NUMBER: {row[2]}.')
-
-                curr_first_name = row[0]
-                curr_last_name = row[1]
-                curr_number = row[2]
-
-                return_string += utilities.add_single_user(curr_first_name, curr_last_name, curr_number)
-
-                line_count += 1
-        print(f'Processed {line_count} lines.')
-        return return_string
 
 
