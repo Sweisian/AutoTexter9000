@@ -9,7 +9,7 @@ import pymongo
 
 #TODO: MAKE THIS A FUNCTION, REPLACE MAIN STUFF WITH FUNCTION
 import inputSanitization
-from main import mydb, ALLOWED_EXTENSIONS, UPLOAD_FOLDER
+from main import ALLOWED_EXTENSIONS, UPLOAD_FOLDER
 
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
 mydb = myclient["pioneers_of_interactive_entertainment_nu"]

@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2eeaf374-0c33-4bc4-b0ad-3b433ab8f7c5" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/scheduleJob.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/scheduleJob.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sendText.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sendText.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/uploadFile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/uploadFile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/Untitled_spreadsheet_-_Sheet1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/uploads/Untitled_spreadsheet_-_Sheet1.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,7 +30,7 @@
           <entry key="gitignore" value="1" />
           <entry key="html" value="29" />
           <entry key="md" value="1" />
-          <entry key="py" value="26" />
+          <entry key="py" value="27" />
           <entry key="txt" value="2" />
         </counts>
       </usages-collector>
@@ -45,7 +39,7 @@
           <entry key="HTML" value="29" />
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="8" />
-          <entry key="Python" value="26" />
+          <entry key="Python" value="27" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -68,13 +62,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="86">
+            <state relative-caret-position="2822">
               <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
               <folding>
                 <element signature="e#0#75#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/utilities.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+              <folding>
+                <marker date="1537628006479" expanded="true" signature="2343:2556" ph="..." />
               </folding>
             </state>
           </provider>
@@ -140,19 +146,6 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utilities.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="37" column="35" lean-forward="true" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-                <marker date="1537579974213" expanded="true" signature="2349:2562" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -165,7 +158,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>number</find>
       <find>sendText</find>
       <find>update</find>
       <find>to_number</find>
@@ -195,6 +187,7 @@
       <find>upload</find>
       <find>allowed</find>
       <find>schedule</find>
+      <find>reciev</find>
     </findStrings>
     <replaceStrings>
       <replace>curr_number</replace>
@@ -229,8 +222,8 @@
         <option value="$PROJECT_DIR$/templates/sendText.html" />
         <option value="$PROJECT_DIR$/templates/uploadFile.html" />
         <option value="$PROJECT_DIR$/templates/scheduleJob.html" />
-        <option value="$PROJECT_DIR$/utilities.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/utilities.py" />
       </list>
     </option>
   </component>
@@ -677,23 +670,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utilities.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="37" column="35" lean-forward="true" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
+        <state relative-caret-position="2822">
+          <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1537579974213" expanded="true" signature="2349:2562" ph="..." />
+            <element signature="e#0#75#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/utilities.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
-          <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
+        <state relative-caret-position="136">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
           <folding>
-            <element signature="e#0#75#0" expanded="true" />
+            <marker date="1537628006479" expanded="true" signature="2343:2556" ph="..." />
           </folding>
         </state>
       </provider>
