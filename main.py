@@ -10,9 +10,6 @@ from bson.objectid import ObjectId
 
 my_number = '+14844840496'
 
-#TODO CHANGE FILE PATH
-UPLOAD_FOLDER = './uploads'
-ALLOWED_EXTENSIONS = set(['csv'])
 
 #TODO: MAKE THIS A FUNCTION, REPLACE MAIN STUFF WITH FUNCTION
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
@@ -23,7 +20,7 @@ app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = utilities.UPLOAD_FOLDER
 
 #################### TEST COMMANDS #######################
 # for x in my_users_col.find():

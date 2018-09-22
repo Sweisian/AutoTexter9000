@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2eeaf374-0c33-4bc4-b0ad-3b433ab8f7c5" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,7 +48,7 @@
           <entry key="Procfile" value="33" />
           <entry key="dummy" value="9" />
           <entry key="html" value="1799" />
-          <entry key="py" value="8782" />
+          <entry key="py" value="8791" />
           <entry key="txt" value="74" />
         </counts>
       </usages-collector>
@@ -55,18 +56,18 @@
         <counts>
           <entry key="HTML" value="1800" />
           <entry key="PLAIN_TEXT" value="116" />
-          <entry key="Python" value="8781" />
+          <entry key="Python" value="8790" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2822">
-              <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
+            <state relative-caret-position="119">
+              <caret line="7" column="34" lean-forward="true" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
               <folding>
                 <element signature="e#0#75#0" expanded="true" />
               </folding>
@@ -74,13 +75,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utilities.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="102">
+              <caret line="12" column="22" lean-forward="true" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
               <folding>
-                <marker date="1537628006479" expanded="true" signature="2343:2556" ph="..." />
+                <element signature="e#0#10#0" expanded="true" />
+                <marker date="1537628325500" expanded="true" signature="2378:2591" ph="..." />
               </folding>
             </state>
           </provider>
@@ -158,9 +160,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>sendText</find>
-      <find>update</find>
-      <find>to_number</find>
       <find>num_is_valid</find>
       <find>curr_first_name</find>
       <find>uploaded_file</find>
@@ -184,10 +183,13 @@
       <find>adduser</find>
       <find>see_user</find>
       <find>url_for</find>
-      <find>upload</find>
       <find>allowed</find>
       <find>schedule</find>
       <find>reciev</find>
+      <find>UPLOAD_FOLDER</find>
+      <find>uplo</find>
+      <find>upload</find>
+      <find>ALLOWED</find>
     </findStrings>
     <replaceStrings>
       <replace>curr_number</replace>
@@ -222,8 +224,8 @@
         <option value="$PROJECT_DIR$/templates/sendText.html" />
         <option value="$PROJECT_DIR$/templates/uploadFile.html" />
         <option value="$PROJECT_DIR$/templates/scheduleJob.html" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/utilities.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
@@ -670,22 +672,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/utilities.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2822">
-          <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
+        <state relative-caret-position="102">
+          <caret line="12" column="22" lean-forward="true" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
           <folding>
-            <element signature="e#0#75#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1537628325500" expanded="true" signature="2378:2591" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utilities.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="119">
+          <caret line="7" column="34" lean-forward="true" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
           <folding>
-            <marker date="1537628006479" expanded="true" signature="2343:2556" ph="..." />
+            <element signature="e#0#75#0" expanded="true" />
           </folding>
         </state>
       </provider>

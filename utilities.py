@@ -9,7 +9,10 @@ import pymongo
 
 #TODO: MAKE THIS A FUNCTION, REPLACE MAIN STUFF WITH FUNCTION
 import inputSanitization
-from main import ALLOWED_EXTENSIONS, UPLOAD_FOLDER
+
+#TODO CHANGE FILE PATH
+UPLOAD_FOLDER = './uploads'
+ALLOWED_EXTENSIONS = set(['csv'])
 
 myclient = pymongo.MongoClient("mongodb://admin1:admin1@ds253891.mlab.com:53891/pioneers_of_interactive_entertainment_nu")
 mydb = myclient["pioneers_of_interactive_entertainment_nu"]
