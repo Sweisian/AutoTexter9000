@@ -148,6 +148,7 @@ def send_bulk_text(message_to_send=None):
         message_to_send = request.values["userinput"]
 
     collection = request.values["collectionName"]
+
     if not collection:
         #TODO: add flash here or something
         return redirect(url_for("send_text_form"))
