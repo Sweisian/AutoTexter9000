@@ -1,7 +1,10 @@
 import phonenumbers
-
+import re
 
 def sanitize_phone_number(phone_number):
+
+    phone_number = purify_digits(phone_number)
+
     try:
         phone_num_object = phonenumbers.parse("+" + phone_number, None)
     except phonenumbers.phonenumberutil.NumberParseException:
@@ -21,6 +24,13 @@ def sanitize_phone_number(phone_number):
     else:
         good_number = phonenumbers.format_number(phone_num_object, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
         return True, good_number
+
+
+def purify_digits(number):
+    result = re.sub('[^0-9]', '', number)
+    if len(result) == 10:
+        result = '1' + result
+    return result
 
 
 def is_name_valid(name_text):
@@ -64,7 +74,7 @@ def input_sanitizer(curr_first_name, curr_last_name, curr_number):
 
 
 
-
+print(purify_digits("12033219249"))
 
 # print("Name is valid: " + str(is_name_valid("Ryan Swei")))
 # print("Name is valid: " + str(is_name_valid("Ryan Swei)")))

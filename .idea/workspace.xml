@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2eeaf374-0c33-4bc4-b0ad-3b433ab8f7c5" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clock.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/countWords.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/enqueJobs.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inputSanitization.py" beforeDir="false" afterPath="$PROJECT_DIR$/inputSanitization.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/displayUsers.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/displayUsers.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilities.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +49,7 @@
           <entry key="Procfile" value="33" />
           <entry key="dummy" value="9" />
           <entry key="html" value="1822" />
-          <entry key="py" value="9087" />
+          <entry key="py" value="10091" />
           <entry key="txt" value="74" />
         </counts>
       </usages-collector>
@@ -62,7 +57,7 @@
         <counts>
           <entry key="HTML" value="1823" />
           <entry key="PLAIN_TEXT" value="116" />
-          <entry key="Python" value="9086" />
+          <entry key="Python" value="10090" />
         </counts>
       </usages-collector>
     </session>
@@ -72,10 +67,36 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="305" column="13" lean-forward="true" selection-start-line="305" selection-start-column="13" selection-end-line="305" selection-end-column="13" />
+            <state relative-caret-position="213">
+              <caret line="315" column="33" lean-forward="true" selection-start-line="315" selection-start-column="33" selection-end-line="315" selection-end-column="33" />
               <folding>
                 <element signature="e#0#75#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utilities.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="37">
+              <caret line="50" column="84" selection-start-line="50" selection-start-column="84" selection-end-line="50" selection-end-column="84" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+                <marker date="1537767878184" expanded="true" signature="907:1120" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inputSanitization.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="850">
+              <caret line="50" column="19" lean-forward="true" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+                <marker date="1537763462080" expanded="true" signature="943:1062" ph="..." />
               </folding>
             </state>
           </provider>
@@ -104,28 +125,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
               <caret line="7" selection-start-line="7" selection-end-line="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utilities.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-                <marker date="1537628325500" expanded="true" signature="2378:2591" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/inputSanitization.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="13" selection-start-column="13" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -169,7 +168,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>uploaded_file</find>
       <find>login_</find>
       <find>send_sing</find>
       <find>send</find>
@@ -199,6 +197,7 @@
       <find>hidden</find>
       <find>delete</find>
       <find>my_users_col</find>
+      <find>sendT</find>
     </findStrings>
     <replaceStrings>
       <replace>curr_number</replace>
@@ -217,7 +216,6 @@
         <option value="$PROJECT_DIR$/pymongoTesting.py" />
         <option value="$PROJECT_DIR$/login_example.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/inputSanitization.py" />
         <option value="$PROJECT_DIR$/templates/addedUsers.html" />
         <option value="$PROJECT_DIR$/settings.py" />
         <option value="$PROJECT_DIR$/Procfile" />
@@ -231,11 +229,12 @@
         <option value="$PROJECT_DIR$/templates/sendText.html" />
         <option value="$PROJECT_DIR$/templates/uploadFile.html" />
         <option value="$PROJECT_DIR$/templates/scheduleJob.html" />
-        <option value="$PROJECT_DIR$/utilities.py" />
         <option value="$PROJECT_DIR$/clock.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/templates/displayUsers.html" />
+        <option value="$PROJECT_DIR$/inputSanitization.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/utilities.py" />
       </list>
     </option>
   </component>
@@ -447,9 +446,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.inputSanitization" />
         <item itemvalue="Python.testing" />
         <item itemvalue="Python.worker" />
-        <item itemvalue="Python.inputSanitization" />
       </list>
     </recent_temporary>
   </component>
@@ -470,12 +469,12 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15862525" />
-      <window_info id="Structure" order="1" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.15862525" />
+      <window_info id="Structure" order="1" visible="true" weight="0.11566424" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49880096" visible="true" weight="0.13758865" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49880096" visible="true" weight="0.3248227" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -492,12 +491,12 @@
       <window_info anchor="right" id="Database" order="4" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12095175" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15862525" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49880096" visible="true" weight="0.0" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49880096" visible="true" weight="0.16879432" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -643,24 +642,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1537628325500" expanded="true" signature="2378:2591" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inputSanitization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="13" selection-start-column="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Procfile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -696,10 +677,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/inputSanitization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="50" column="19" lean-forward="true" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <marker date="1537763462080" expanded="true" signature="943:1062" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="37">
+          <caret line="50" column="84" selection-start-line="50" selection-start-column="84" selection-end-line="50" selection-end-column="84" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1537767878184" expanded="true" signature="907:1120" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="305" column="13" lean-forward="true" selection-start-line="305" selection-start-column="13" selection-end-line="305" selection-end-column="13" />
+        <state relative-caret-position="213">
+          <caret line="315" column="33" lean-forward="true" selection-start-line="315" selection-start-column="33" selection-end-line="315" selection-end-column="33" />
           <folding>
             <element signature="e#0#75#0" expanded="true" />
           </folding>

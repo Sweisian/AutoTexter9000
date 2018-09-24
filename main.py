@@ -8,6 +8,7 @@ import json
 
 import utilities
 from bson.objectid import ObjectId
+from inputSanitization import input_sanitizer
 
 
 my_number = '+14844840496'
@@ -300,12 +301,25 @@ def uploaded_file(filename):
     # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
-@app.route('/PIE-Form')
-def uploaded_file():
-    for val in request.values:
-        print
-    return "Thanks for uploading!"
-    # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+@app.route('/PIE-Form', methods=["POST"])
+def pie_form_handler():
+    data = request.get_json()
+
+    first_name = data["first_name"]
+    last_name = data["last_name"]
+
+    phone_number = data.get("phone_number")
+    if phone_number:
+        is_valid = input_sanitizer(first_name, last_name, phone_number)
+        if is_valid:
+            return_message = utilities.add_single_user(first_name, last_name, phone_number, "PIE")
+            print(return_message)
+
+            client = plivo.RestClient(os.environ['PLIVO_AUTH_ID'], os.environ['PLIVO_AUTH_TOKEN'])
+            message = f"Hello {first_name}! You have been subscribed to the PIE AutoTexter9000. Reply 'STOP' at any time to unsubscribe and 'START to re-subscribe. (AutoTexter9000 developed in house by PIE Exec with love)"
+            utilities.send_single_text(client, utilities.MY_NUMBER, phone_number, message)
+
+    return "Thanks for posting"
 
 
 if __name__ == '__main__':
