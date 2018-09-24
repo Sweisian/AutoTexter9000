@@ -8,7 +8,7 @@ import json
 
 import utilities
 from bson.objectid import ObjectId
-from inputSanitization import input_sanitizer
+from inputSanitization import input_sanitizer, purify_digits
 
 
 my_number = '+14844840496'
@@ -310,6 +310,7 @@ def pie_form_handler():
 
     phone_number = data.get("phone_number")
     if phone_number:
+        phone_number = purify_digits(phone_number)
         is_valid = input_sanitizer(first_name, last_name, phone_number)
         if is_valid:
             return_message = utilities.add_single_user(first_name, last_name, phone_number, "PIE")

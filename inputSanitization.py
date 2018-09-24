@@ -3,8 +3,6 @@ import re
 
 def sanitize_phone_number(phone_number):
 
-    phone_number = purify_digits(phone_number)
-
     try:
         phone_num_object = phonenumbers.parse("+" + phone_number, None)
     except phonenumbers.phonenumberutil.NumberParseException:
@@ -74,7 +72,7 @@ def input_sanitizer(curr_first_name, curr_last_name, curr_number):
 
 
 
-print(purify_digits("12033219249"))
+#print(purify_digits("203321asdf92asdf49"))
 
 # print("Name is valid: " + str(is_name_valid("Ryan Swei")))
 # print("Name is valid: " + str(is_name_valid("Ryan Swei)")))
