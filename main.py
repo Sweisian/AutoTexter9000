@@ -4,6 +4,8 @@ import plivo
 import pymongo
 from werkzeug.utils import secure_filename
 
+import json
+
 import utilities
 from bson.objectid import ObjectId
 
@@ -51,29 +53,32 @@ def add_users():
 
 @app.route('/alterUsers', methods=["POST"])
 def alter_users():
+    cur_col = request.values.get("collectionName")
+
     if request.values.get("enable_users"):
         print("ENABLE USERS")
         for val in request.values:
-            curr_user = my_users_col.find_one({"_id":val})
+            curr_user = mydb[cur_col].find_one({"_id": val})
             if curr_user:
-                my_users_col.update_one(curr_user, {"$set": {"user_enabled": True}})
+                mydb[cur_col].update_one(curr_user, {"$set": {"user_enabled": True}})
                 print(f"USER {curr_user} enabled!")
     if request.values.get("disable_users"):
         print("DISABLE USERS")
         for val in request.values:
-            curr_user = my_users_col.find_one({"_id":val})
+            curr_user = mydb[cur_col].find_one({"_id": val})
             if curr_user:
-                my_users_col.update_one(curr_user, {"$set": {"user_enabled": False}})
+                mydb[cur_col].update_one(curr_user, {"$set": {"user_enabled": False}})
                 print(f"USER {curr_user} disabled!")
     if request.values.get("delete_users"):
         print("DELETE USERS")
         for val in request.values:
-            curr_user = my_users_col.find_one({"_id":val})
+            curr_user = mydb[cur_col].find_one({"_id": val})
             if curr_user:
-                my_users_col.delete_one(curr_user)
+                mydb[cur_col].delete_one(curr_user)
                 print(f"USER {curr_user} deleted!")
 
-    return redirect('/seeUsers')
+    messages = json.dumps({"collectionName": cur_col})
+    return redirect(url_for("see_users", messages=messages))
 
 # @app.route('/addUsersCompletion', methods=["POST"])
 # def add_users():
@@ -110,7 +115,14 @@ def delete_collection():
 
 @app.route('/seeUsers', methods=["GET", "POST"])
 def see_users():
-    collection = request.values.get("collectionName")
+    for val in request.values:
+        print("val", val, request.values[val], type(val))
+
+    if request.values.get("messages"):
+        collection = json.loads(request.values.get("messages")).get("collectionName")
+    else:
+        collection = request.values.get("collectionName")
+
     if collection:
         user_data = mydb[collection].find()
         cur_col = collection
@@ -284,6 +296,14 @@ def alter_jobs():
 
 @app.route('/get_uploads/<filename>')
 def uploaded_file(filename):
+    return "Thanks for uploading!"
+    # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/PIE-Form')
+def uploaded_file():
+    for val in request.values:
+        print
     return "Thanks for uploading!"
     # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
