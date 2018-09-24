@@ -172,6 +172,10 @@ def send_bulk_text(message_to_send=None):
     for curr_user in user_data:
         if curr_user.get("user_enabled"):
             curr_num = curr_user["_id"]
+            curr_first_name = curr_user["first_name"]
+
+            message_to_send = utilities.filler_replacement(curr_first_name, message_to_send)
+
             utilities.send_single_text(client, my_number, curr_num, message_to_send)
     return redirect(url_for("send_text_form"))
 

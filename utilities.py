@@ -20,6 +20,8 @@ my_users_col = mydb["users"]
 
 MY_NUMBER = '+14844840496'
 
+FIRSTNAME = "$$FIRSTNAME$$"
+
 
 def send_single_text(client, my_number, dest_number, msg):
     print("Sending text to " + dest_number)
@@ -111,3 +113,8 @@ def is_in_database(curr_number, collection):
         return True
     else:
         return False
+
+
+def filler_replacement(first_name, message):
+    message = message.replace(FIRSTNAME, first_name)
+    return message
