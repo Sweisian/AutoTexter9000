@@ -5,6 +5,7 @@
     <div>
         <form method=POST action="{{ url_for('send_text_form')}}">
             <select name="collectionName">
+                <option disabled selected value> -- select a collection -- </option>
                 {% for name in collection_list %}
                     <option value="{{name}}" >{{name}}</option>
                 {% endfor %}

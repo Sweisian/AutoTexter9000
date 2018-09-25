@@ -49,6 +49,8 @@ def col_list_santitized():
 # for job in my_jobs_col.find():
 #     handle_single_job(job)
 def add_single_user(curr_first_name, curr_last_name, curr_number, collection):
+    #TODO: I should probably change the way input_sanitizer works to return correct stuff instead of boolean and a message
+    curr_number = inputSanitization.purify_digits(curr_number)
     is_valid_user, sanitization_msg = inputSanitization.input_sanitizer(curr_first_name, curr_last_name,
                                                                         curr_number)
     return_msg = "ERROR. THERE SHOULD BE SOMETHING ELSE HERE"
@@ -56,12 +58,12 @@ def add_single_user(curr_first_name, curr_last_name, curr_number, collection):
     #print(f"COLLECTION IS {collection}")
 
     if not is_valid_user:
-        return_msg = f'NOT ADDED TO {collection}!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
+        return_msg = f'NOT ADDED TO ({collection})!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
         return_msg += '\n' + sanitization_msg
         print(return_msg)
         return return_msg
     elif is_in_database(curr_number, collection):
-        return_msg = f'NOT ADDED!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
+        return_msg = f'NOT ADDED TO ({collection})!!! FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})'
         return_msg += '\n' + f"USER IS ALREADY IN  COLLECTION {collection} (KEYED FROM PHONE NUMBER)"
         print(return_msg)
         return return_msg
@@ -73,7 +75,7 @@ def add_single_user(curr_first_name, curr_last_name, curr_number, collection):
                   }
         mydb[collection].insert_one(mydict)
 
-        return_msg = f'ADDED TO COLLECTION {collection} FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})\n'
+        return_msg = f'ADDED TO COLLECTION ({collection}) FIRST NAME: ({curr_first_name}) LAST NAME: ({curr_last_name}) PHONE NUMBER: ({curr_number})\n'
     return return_msg
 
 

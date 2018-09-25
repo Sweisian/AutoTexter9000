@@ -13,6 +13,7 @@
             <div>
                 <form method=POST action="{{ url_for('delete_collection') }}">
                     <select name="collectionName">
+                        <option disabled selected value> -- select a collection -- </option>
                         {% for name in collection_list %}
                             <option value="{{name}}" >{{name}}</option>
                         {% endfor %}
@@ -33,6 +34,7 @@
                 {% endfor %}
 
                 <select name="collectionName">
+                    <option disabled selected value> -- select a collection -- </option>
                     {% for name in collection_list %}
                         <option value="{{name}}" >{{name}}</option>
                     {% endfor %}
