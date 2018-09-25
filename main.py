@@ -49,7 +49,7 @@ def add_users():
         curr_number = request.form['number' + str(i)]
         curr_collection = request.values['collectionName']
         return_message_list.append(utilities.add_single_user(curr_first_name, curr_last_name, curr_number, curr_collection))
-    return render_template("addedUsers.html", user_data=return_message_list, )
+    return render_template("addedUsers.html", user_data=return_message_list)
 
 
 @app.route('/alterUsers', methods=["POST"])
@@ -239,11 +239,11 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             if cur_col:
-                return_string = utilities.bulk_upload_to_database(filename, cur_col)
+                return_message_list = utilities.bulk_upload_to_database(filename, cur_col)
             else:
-                return_string = "Sorry, you did not select a database"
+                return_message_list = ["Sorry, you did not select a database"]
 
-            return return_string
+            return render_template("addedUsers.html", user_data=return_message_list)
             # return redirect(url_for('uploaded_file',filename=filename))
 
     return render_template('uploadFile.html', collection_list=collection_list, cur_col=cur_col)

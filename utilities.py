@@ -87,7 +87,7 @@ def bulk_upload_to_database(filename, cur_col):
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
 
-        return_string = ""
+        return_string_list = []
         for row in csv_reader:
             if line_count == 0:
                 print(f'Column names are {", ".join(row)}')
@@ -99,11 +99,11 @@ def bulk_upload_to_database(filename, cur_col):
                 curr_last_name = row[1]
                 curr_number = row[2]
 
-                return_string += add_single_user(curr_first_name, curr_last_name, curr_number, cur_col)
+                return_string_list.append(add_single_user(curr_first_name, curr_last_name, curr_number, cur_col))
 
                 line_count += 1
         print(f'Processed {line_count} lines.')
-        return return_string
+        return return_string_list
 
 
 def is_in_database(curr_number, collection):
