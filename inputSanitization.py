@@ -32,7 +32,7 @@ def purify_digits(number):
 
 
 def is_name_valid(name_text):
-    allowed_chars = ' abcdefghijklmnopqrstuvwxyzABCEFGHIJKLMNOPQRSTUVQRSWXYZ'
+    allowed_chars = """ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQRSWXYZ-' """
     if my_contains_all(name_text, allowed_chars):
         return True
     else:
