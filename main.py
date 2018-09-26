@@ -1,8 +1,9 @@
-from flask import Flask, flash, render_template, url_for, request, redirect
+from flask import Flask, flash, render_template, url_for, request, redirect, make_response
 import os
 import plivo
 import pymongo
 from werkzeug.utils import secure_filename
+from functools import wraps
 
 import json
 
@@ -34,13 +35,25 @@ app.config['UPLOAD_FOLDER'] = utilities.UPLOAD_FOLDER
 #################### TEST COMMANDS #######################
 
 
+def auth_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if auth and auth.username == 'ryanswei' and auth.password == 'ilovedolphins':
+            return f(*args, **kwargs)
+        return make_response('Could not verify your login!', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+    return decorated
+
+
 @app.route('/', methods=["GET"])
+@auth_required
 def index():
     collection_list = utilities.col_list_santitized()
     return render_template('index.html', collection_list=collection_list)
 
 
 @app.route('/addUsers', methods=["POST"])
+@auth_required
 def add_users():
     return_message_list = []
     for i in range(0, 9):
@@ -53,6 +66,7 @@ def add_users():
 
 
 @app.route('/alterUsers', methods=["POST"])
+@auth_required
 def alter_users():
     cur_col = request.values.get("collectionName")
 
@@ -92,6 +106,7 @@ def alter_users():
 #     return redirect('/seeUsers')
 
 @app.route('/createCollection', methods=["POST"])
+@auth_required
 def create_collection():
     collection_name = request.values["collectionName"]
 
@@ -107,6 +122,7 @@ def create_collection():
     return redirect(url_for("index"))
 
 @app.route('/deleteCollection', methods=["POST"])
+@auth_required
 def delete_collection():
     name = request.values["collectionName"]
     curr_col = mydb[name]
@@ -115,6 +131,7 @@ def delete_collection():
 
 
 @app.route('/seeUsers', methods=["GET", "POST"])
+@auth_required
 def see_users():
     for val in request.values:
         print("val", val, request.values[val], type(val))
@@ -141,6 +158,7 @@ def see_users():
 
 
 @app.route('/sendTextForm', methods=["GET", "POST"])
+@auth_required
 def send_text_form():
 
     collection = request.values.get("collectionName")
@@ -154,6 +172,7 @@ def send_text_form():
 
 
 @app.route('/sendBulkText', methods=["POST"])
+@auth_required
 def send_bulk_text(message_to_send=None):
 
     #This is when we are triggering a message manually
@@ -214,6 +233,7 @@ def send_bulk_text(message_to_send=None):
 
 
 @app.route('/uploadHandler', methods=['GET', 'POST'])
+@auth_required
 def upload_file():
 
     collection_list = utilities.col_list_santitized()
@@ -250,6 +270,7 @@ def upload_file():
 
 
 @app.route('/scheduleMessage', methods=['GET', "POST"])
+@auth_required
 def schedule_message():
 
     if request.method == "GET":
@@ -279,6 +300,7 @@ def schedule_message():
 # Gonna have to do something smarter than this in the future. Not scalable to loop over all entries
 
 @app.route('/alterJobs', methods=["POST"])
+@auth_required
 def alter_jobs():
     my_jobs_col = mydb["jobs"]
     if request.values.get("delete_jobs"):
@@ -300,12 +322,14 @@ def alter_jobs():
 
 
 @app.route('/get_uploads/<filename>')
+@auth_required
 def uploaded_file(filename):
     return "Thanks for uploading!"
     # return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 @app.route('/PIE-Form', methods=["POST"])
+@auth_required
 def pie_form_handler():
     data = request.get_json()
 
@@ -325,6 +349,29 @@ def pie_form_handler():
             utilities.send_single_text(client, utilities.MY_NUMBER, phone_number, message)
 
     return "Thanks for posting"
+
+
+@app.route('/LXA-Rush-Form', methods=["POST"])
+@auth_required
+def lxa_rush_form_handler():
+    data = request.get_json()
+
+    first_name = data["first_name"]
+
+    if data.get("last_name"):
+        last_name = data["last_name"]
+    else:
+        last_name = "NONE"
+
+    phone_number = data.get("phone_number")
+    if phone_number:
+        phone_number = purify_digits(phone_number)
+        is_valid = input_sanitizer(first_name, last_name, phone_number)
+        if is_valid:
+            return_message = utilities.add_single_user(first_name, last_name, phone_number, "LXA_RUSH")
+            print(return_message)
+
+    return f"FIRST: {first_name}, LAST: {last_name}, PHONE: {phone_number}"
 
 
 if __name__ == '__main__':
